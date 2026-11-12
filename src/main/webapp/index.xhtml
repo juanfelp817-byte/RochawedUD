@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- Autor: [Nombre completo del estudiante] -->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core" xmlns:ui="jakarta.faces.facelets"
+	xmlns:p="primefaces">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Admisiones universitarias</title>
+	<style type="text/css">
+/* Autor: [Nombre completo del estudiante] */
+body {
+	margin: 0;
+	background: #eef1f7;
+	font-family: "Segoe UI", Roboto, Arial, sans-serif;
+	color: #2b2f3a;
+}
+
+.cabecera {
+	background: linear-gradient(90deg, #2d3a8c, #4a5fd1);
+	color: #ffffff;
+	text-align: center;
+	padding: 2rem 1rem;
+}
+
+.cabecera h1 { margin: 0; font-size: 1.9rem; }
+.cabecera p { margin: 0.4rem 0 0 0; opacity: 0.9; }
+
+.contenedor { max-width: 64rem; margin: 1.5rem auto; padding: 0 1rem; }
+
+.bienvenida { text-align: center; padding: 1rem 0; }
+.bienvenida .botones { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 1.2rem; }
+
+.cifras { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 1.2rem 0; }
+.cifra { background: #f3f5fc; border-radius: 0.6rem; padding: 0.8rem 1.6rem; text-align: center; }
+.cifra .numero { display: block; font-size: 1.8rem; font-weight: 700; color: #2d3a8c; }
+
+.formulario-etiqueta { font-weight: 600; }
+
+.barra-tabla { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+
+.pie {
+	margin-top: 2.5rem;
+	padding: 1.25rem 1rem;
+	text-align: center;
+	background: #2d3a8c;
+	color: #ffffff;
+	font-size: 0.9rem;
+}
+
+.pie p { margin: 0.2rem 0; }
+	</style>
+</h:head>
+<h:body>
+
+	<header class="cabecera">
+		<h1>Admisiones universitarias</h1>
+		<p>#{ojBean.getSaludo()}</p>
+	</header>
+
+	<div class="contenedor">
+
+		<p:messages id="msjs" globalOnly="true" showDetail="true"
+			closable="true" />
+
+		<p:tabView id="vistas" widgetVar="vistas">
+
+			<!-- ============ INICIO ============ -->
+			<p:tab title="Inicio">
+				<div class="bienvenida">
+					<h2>Bienvenido</h2>
+					<p>Aquí puedes dejar tus datos de contacto si quieres ingresar a
+						uno de nuestros programas académicos.</p>
+
+					<h:panelGroup layout="block" styleClass="cifras contadores">
+						<div class="cifra">
+							<span class="numero">#{progBean.listaP.size()}</span> Programas
+							ofertados
+						</div>
+						<div class="cifra">
+							<span class="numero">#{aspBean.listaA.size()}</span> Aspirantes
+							registrados
+						</div>
+					</h:panelGroup>
+
+					<div class="botones">
+						<p:commandButton type="button" value="Quiero registrarme"
+							icon="pi pi-user-plus" styleClass="ui-button-primary"
+							onclick="PF('vistas').select(1)" />
+						<p:commandButton type="button" value="Vista administrador"
+							icon="pi pi-list" styleClass="ui-button-secondary"
+							onclick="PF('vistas').select(2)" />
+						<p:commandButton type="button" value="Gestionar programas"
+							icon="pi pi-book" styleClass="ui-button-help"
+							onclick="PF('vistas').select(3)" />
+					</div>
+				</div>
+			</p:tab>
+
+			<!-- ============ REGISTRO DE ASPIRANTE ============ -->
+			<p:tab title="Registro de aspirante">
+				<h:form id="formRegistro">
+					<p:panel header="Datos de contacto">
+						<p:panelGrid columns="3" styleClass="ui-noborder"
+							contentStyleClass="ui-fluid">
+
+							<p:outputLabel for="identificacion" value="Identificación:"
+								styleClass="formulario-etiqueta" />
+							<p:inputText id="identificacion"
+								value="#{aspBean.nuevoAspirante.identificacion}" maxlength="12"
+								placeholder="Solo números"
+								requiredMessage="La identificación es obligatoria.">
+								<f:validateRequired />
+								<f:validateRegex pattern="[0-9]{6,12}" />
+							</p:inputText>
+							<p:message for="identificacion" display="text" />
+
+							<p:outputLabel for="nombres" value="Nombres:"
+								styleClass="formulario-etiqueta" />
+							<p:inputText id="nombres"
+								value="#{aspBean.nuevoAspirante.nombres}" maxlength="50"
+								requiredMessage="Los nombres son obligatorios.">
+								<f:validateRequired />
+								<f:validateLength minimum="2" maximum="50" />
+								<f:validateRegex pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+" />
+							</p:inputText>
+							<p:message for="nombres" display="text" />
+
+							<p:outputLabel for="apellidos" value="Apellidos:"
+								styleClass="formulario-etiqueta" />
+							<p:inputText id="apellidos"
+								value="#{aspBean.nuevoAspirante.apellidos}" maxlength="50"
+								requiredMessage="Los apellidos son obligatorios.">
+								<f:validateRequired />
+								<f:validateLength minimum="2" maximum="50" />
+								<f:validateRegex pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+" />
+							</p:inputText>
+							<p:message for="apellidos" display="text" />
+
+							<p:outputLabel for="correo" value="Correo electrónico:"
+								styleClass="formulario-etiqueta" />
+							<p:inputText id="correo"
+								value="#{aspBean.nuevoAspirante.correo}" maxlength="80"
+								placeholder="nombre@correo.com"
+								requiredMessage="El correo es obligatorio.">
+								<f:validateRequired />
+								<f:validateRegex
+									pattern="[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}" />
+							</p:inputText>
+							<p:message for="correo" display="text" />
+
+							<p:outputLabel for="telefono" value="Teléfono:"
+								styleClass="formulario-etiqueta" />
+							<p:inputText id="telefono"
+								value="#{aspBean.nuevoAspirante.telefono}" maxlength="10"
+								placeholder="Solo números"
+								requiredMessage="El teléfono es obligatorio.">
+								<f:validateRequired />
+								<f:validateRegex pattern="[0-9]{7,10}" />
+							</p:inputText>
+							<p:message for="telefono" display="text" />
+
+							<p:outputLabel for="programa" value="Programa de interés:"
+								styleClass="formulario-etiqueta" />
+							<p:selectOneMenu id="programa" styleClass="menuProg"
+								value="#{aspBean.nuevoAspirante.programa}"
+								requiredMessage="Selecciona un programa académico.">
+								<f:selectItem itemLabel="Selecciona un programa" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{progBean.listaP}" var="pr"
+									itemValue="#{pr.nombre}" itemLabel="#{pr.nombre}" />
+								<f:validateRequired />
+							</p:selectOneMenu>
+							<p:message for="programa" display="text" />
+
+						</p:panelGrid>
+
+						<f:facet name="footer">
+							<p:commandButton value="Registrarme" icon="pi pi-check"
+								styleClass="ui-button-success" action="#{aspBean.registrar}"
+								process="@form"
+								update="@form :msjs @(.tablaAsp) @(.contadores)"
+								validateClient="true" />
+						</f:facet>
+					</p:panel>
+				</h:form>
+			</p:tab>
+
+			<!-- ============ VISTA ADMINISTRADOR ============ -->
+			<p:tab title="Vista administrador">
+				<h:form id="formTabla">
+					<p:dataTable id="tablaAspirantes" styleClass="tablaAsp" var="asp"
+						value="#{aspBean.listaA}" rows="10" paginator="true"
+						paginatorPosition="bottom" stripedRows="true"
+						emptyMessage="Todavía no hay aspirantes registrados.">
+						<f:facet name="header">
+							<div class="barra-tabla">
+								<span>Aspirantes registrados: #{aspBean.listaA.size()}</span>
+								<p:commandButton value="Actualizar" icon="pi pi-refresh"
+									action="#{aspBean.cargarAspirantes}" process="@this"
+									update="@(.tablaAsp) @(.contadores)" />
+							</div>
+						</f:facet>
+						<p:column headerText="Identificación">
+							<h:outputText value="#{asp.identificacion}" />
+						</p:column>
+						<p:column headerText="Nombres">
+							<h:outputText value="#{asp.nombres}" />
+						</p:column>
+						<p:column headerText="Apellidos">
+							<h:outputText value="#{asp.apellidos}" />
+						</p:column>
+						<p:column headerText="Correo">
+							<h:outputText value="#{asp.correo}" />
+						</p:column>
+						<p:column headerText="Teléfono">
+							<h:outputText value="#{asp.telefono}" />
+						</p:column>
+						<p:column headerText="Programa de interés">
+							<h:outputText value="#{asp.programa}" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+
+			<!-- ============ GESTIONAR PROGRAMAS ============ -->
+			<p:tab title="Gestionar programas">
+				<h:form id="formPrograma">
+					<p:panel header="Nuevo programa" style="margin-bottom: 1.5rem;">
+						<p:panelGrid columns="3" styleClass="ui-noborder"
+							contentStyleClass="ui-fluid">
+							<p:outputLabel for="nombre" value="Nombre del programa:"
+								styleClass="formulario-etiqueta" />
+							<p:inputText id="nombre"
+								value="#{progBean.nuevoPrograma.nombre}" maxlength="60"
+								requiredMessage="El nombre del programa es obligatorio.">
+								<f:validateRequired />
+								<f:validateLength minimum="3" maximum="60" />
+							</p:inputText>
+							<p:message for="nombre" display="text" />
+						</p:panelGrid>
+						<f:facet name="footer">
+							<p:commandButton value="Agregar programa" icon="pi pi-plus"
+								styleClass="ui-button-success" action="#{progBean.agregar}"
+								process="@form"
+								update="@form :msjs @(.tablaProg) @(.menuProg) @(.contadores)"
+								validateClient="true" />
+						</f:facet>
+					</p:panel>
+				</h:form>
+
+				<h:form id="formTablaProg">
+					<p:dataTable id="tablaProgramas" styleClass="tablaProg" var="prog"
+						value="#{progBean.listaP}" editable="true" editMode="row"
+						stripedRows="true"
+						emptyMessage="No hay programas académicos registrados.">
+						<f:facet name="header">Programas académicos ofertados</f:facet>
+
+						<p:ajax event="rowEdit" listener="#{progBean.onRowEdit}"
+							update=":msjs @(.tablaProg) @(.menuProg)" />
+
+						<p:column headerText="Código" style="width: 6rem;">
+							<h:outputText value="#{prog.id}" />
+						</p:column>
+
+						<p:column headerText="Programa">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{prog.nombre}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{prog.nombre}" style="width: 100%;" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column style="width: 6rem;">
+							<p:rowEditor />
+						</p:column>
+
+						<p:column style="width: 5rem; text-align: center;">
+							<p:commandButton icon="pi pi-trash"
+								styleClass="ui-button-danger ui-button-flat"
+								action="#{progBean.eliminar(prog)}" process="@this"
+								update=":msjs @(.tablaProg) @(.menuProg) @(.contadores)"
+								title="Eliminar" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+
+		</p:tabView>
+	</div>
+
+	<footer class="pie">
+		<p>[Nombre completo del estudiante] &#183; [Asignatura] &#183; Grupo [Grupo]</p>
+		<p>Universidad Distrital Francisco José de Caldas &#183; 2026</p>
+	</footer>
+
+</h:body>
+</html>
